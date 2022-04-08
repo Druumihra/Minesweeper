@@ -35,10 +35,10 @@ namespace Minesweeper
                 char choice = Console.ReadKey().KeyChar;
                 Console.Clear();
 
-                
-              
-                
-                
+
+
+
+                //gives player the ability to change map size between 5 and 40 spaces on the x and y axis
 
                 if (choice == '1')
                 {
@@ -46,13 +46,13 @@ namespace Minesweeper
                     bool successgridy = false;
                     int xgridsize;
                     int ygridsize;
-                    
+
                     while (!successgridx)
                     {
                         Console.WriteLine("Please input X length. Minumum size: 5. Max size: 40");
                         successgridx = int.TryParse(Console.ReadLine(), out xgridsize);
                         xlength = xgridsize;
-                        
+
                     }
 
                     if (xlength > 40)
@@ -60,14 +60,14 @@ namespace Minesweeper
                         xlength = 40;
                     }
 
-                    
+
                     while (!successgridy)
                     {
                         Console.WriteLine("Please input Y length. Minumum size: 5. Max size: 40");
                         successgridy = int.TryParse(Console.ReadLine(), out ygridsize);
                         ylength = ygridsize;
                     }
-                    
+
                     if (ylength > 40)
                     {
                         ylength = 40;
@@ -77,7 +77,7 @@ namespace Minesweeper
 
                     string[,] emptymap = new string[xlength, ylength];
 
-
+                    //fills map with empty spaces -> [ ]
                     while (i < xlength)
                     {
                         while (j < ylength)
@@ -91,7 +91,7 @@ namespace Minesweeper
                     i = 0;
                     j = 0;
 
-                    //loop that prints out map on screen every time it has been updated
+                    //loop that prints out map grid on screen every time it has been updated and clears old grid
                     bool life = true;
                     while (life)
                     {
@@ -103,19 +103,20 @@ namespace Minesweeper
 
                             while (i < xlength)
                             {
-                                
+
                                 if (xgrid)
                                 {
                                     int k = 0;
                                     Console.Write("  ");
                                     while (k < xlength)
-                                    {                                                                       
-                                        if (k+1 < 10)
+                                    {
+                                        if (k + 1 < 10)
                                         {
-                                            Console.Write($"   0{k+1}");
+                                            Console.Write($"   0{k + 1}");
                                         }
-                                        else { 
-                                        Console.Write($"   {k+1}");
+                                        else
+                                        {
+                                            Console.Write($"   {k + 1}");
                                         }
                                         k++;
                                     }
@@ -124,17 +125,17 @@ namespace Minesweeper
                                 }
                                 while (ygrid)
                                 {
-                                    if (j+1 < 10)
+                                    if (j + 1 < 10)
                                     {
                                         Console.Write($"0{j + 1}");
                                     }
-                                    else 
-                                    { 
-                                    Console.Write($"{j + 1}");
+                                    else
+                                    {
+                                        Console.Write($"{j + 1}");
                                     }
                                     ygrid = false;
                                 }
-                                                           
+
 
                                 Console.Write($"  {emptymap[i, j]}");
                                 i++;
@@ -144,7 +145,7 @@ namespace Minesweeper
                             i = 0;
                             ygrid = true;
                         }
-                        
+                        //starts allowing the users input and begins the actual game
                         bool userturn = true;
                         while (userturn)
                         {
@@ -156,15 +157,15 @@ namespace Minesweeper
                             j = 0;
 
                             Console.WriteLine("Please input X and Y coordinate to check square");
-                           while (!successx)
+                            while (!successx)
                             {
                                 Console.WriteLine("X:");
                                 successx = int.TryParse(Console.ReadLine(), out userinputx);
                             }
                             userinputx -= 1;
 
-                            while (!successy) 
-                            { 
+                            while (!successy)
+                            {
                                 Console.WriteLine("Y:");
                                 successy = int.TryParse(Console.ReadLine(), out userinputy);
                             }
@@ -192,7 +193,7 @@ namespace Minesweeper
                             else
                             {
                                 //checks the 8 squares around players chosen tile to see amount of bombs
-                                //encase them in if statements that check if they would create an out of bounds error TO DO
+                                //encase them in if statements that check if they would create an out of bounds error
                                 //The IF statements should check each corner around the inputted array point to see if its out of bounds.
                                 // [x-1, y] [x+1, y] [x, y-1] [x, y+1] [x-1, y-1] [x-1, y+1] [x+1, y-1] [x+1, y+1]
 
@@ -358,7 +359,7 @@ namespace Minesweeper
                                         surroundingbombs++;
                                     }
                                 }
-                                else
+                                else // if there is a no problems or chance with out of bounds in array it uses this.
                                 {
                                     if (hiddenmap[userinputx - 1, userinputy] == 1)
                                     {
@@ -393,49 +394,49 @@ namespace Minesweeper
                                         surroundingbombs++;
                                     }
                                 }
-                            
+                                // adds playerscore, ends turn, commits bombcount to visible map array, and resets bombs counter
                                 playerscore += 10;
                                 emptymap[userinputx, userinputy] = $"[{surroundingbombs}]";
                                 surroundingbombs = 0;
                                 userturn = false;
-                                
-                            } 
+
+                            }
 
                         }
                     }
-                } 
+                }
 
 
+                //if player wants to see score
 
+                else if (choice == '2')
+                {
 
-               else if (choice == '2')
-               {
-                    
-                  Console.WriteLine($"{player.name} got a score of {player.score}");
-                  Thread.Sleep(2000);
-                  Console.Clear();
-                
-               }
-                               
+                    Console.WriteLine($"{player.name} got a highscore of {player.score}");
+                    Thread.Sleep(2000);
+                    Console.Clear();
+
+                }
+                //if player wants to quit  
                 else if (choice == '3')
                 {
                     playing = false;
                 }
-
+                //player chooses none of the above options
                 else
                 {
                     Console.Clear();
                     Console.WriteLine("Error: Please pick 1 or 2 or 3");
                     Console.WriteLine("1: Play game \n2: Exit");
-                                       
+
                 }
             }
         }
 
 
 
-      public static int[,] Mapgen(int x, int y)
-      {
+        public static int[,] Mapgen(int x, int y)
+        {
             //forcefully sets a minimum map size if its too small 
             if (x < 5)
             {
@@ -468,20 +469,20 @@ namespace Minesweeper
             }
 
             //places bombs on the map with the value of 1
-            while (b < bombs) 
+            while (b < bombs)
             {
 
-                int xcoord = rnd.Next(0, x-1);
-                int ycoord = rnd.Next(0, y-1);
-                
-                if (map[xcoord,ycoord] != 1)
+                int xcoord = rnd.Next(0, x - 1);
+                int ycoord = rnd.Next(0, y - 1);
+
+                if (map[xcoord, ycoord] != 1)
                 {
                     map[xcoord, ycoord] = 1;
                     b++;
                 }
 
             }
-                return map;
-      }
+            return map;
+        }
     }
 }
